@@ -15,15 +15,23 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, Promise<Respons
     this.userRepo = userRepo;
   }
 
-  async execute(request: CreateUserDTO): Promise<Response> {
+ async execute(request: CreateUserDTO): Promise<Response> {
     const { username, email, password } = request;
 
     try {
+     
       const userAlreadyExists = await this.userRepo.exists(email);
       if (userAlreadyExists) {
         return Result.fail("O e-mail já está em uso.");
       }
 
+     
+      const usernameTaken = await this.userRepo.existsByUsername(username);
+      if (usernameTaken) {
+        return Result.fail("Este nome de usuário já está em uso.");
+      }
+
+     
       const emailOrError = UserEmail.create(email);
       const passwordOrError = UserPassword.create(password);
 
@@ -33,6 +41,7 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, Promise<Respons
         return Result.fail(combinedPropsResult.error as string);
       }
 
+   
       const userOrError = User.create({
         username,
         email: emailOrError.getValue(),
@@ -45,9 +54,10 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, Promise<Respons
 
       const user = userOrError.getValue();
 
+  
       await this.userRepo.save(user);
 
-      
+     
       return Result.ok({
         id: user.id.toString(),
         username: user.username,

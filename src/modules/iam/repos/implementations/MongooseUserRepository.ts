@@ -5,8 +5,19 @@ import { UserModel } from "../../infra/database/user.model";
 
 export class MongooseUserRepository implements IUserRepository {
   
+
+  async findById(id: string): Promise<User | null> {
+    const rawUser = await UserModel.findOne({ _id: id, deletedAt: null });
+    return UserMap.toDomain(rawUser);
+  }
+ 
   async exists(email: string): Promise<boolean> {
     const user = await UserModel.findOne({ email });
+    return !!user;
+  }
+
+  async existsByUsername(username: string): Promise<boolean> {
+    const user = await UserModel.findOne({ username });
     return !!user;
   }
 
@@ -23,7 +34,6 @@ export class MongooseUserRepository implements IUserRepository {
   async save(user: User): Promise<void> {
     const rawUser = await UserMap.toPersistence(user);
     
-   
     await UserModel.findOneAndUpdate(
       { _id: rawUser._id },
       rawUser,

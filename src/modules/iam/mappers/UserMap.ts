@@ -4,7 +4,6 @@ import { UserPassword } from "../domain/valueObjects/UserPassword";
 
 export class UserMap {
   
-  
   public static async toPersistence(user: User): Promise<any> {
     const passwordHash = await user.password.getHashedValue();
     
@@ -14,11 +13,12 @@ export class UserMap {
       email: user.email.value,
       password: passwordHash,
       avatar: user.avatar,
-      createdAt: user.createdAt
+      createdAt: user.createdAt,
+      updatedAt: user.props.updatedAt, 
+      deletedAt: user.deletedAt       
     };
   }
 
-  
   public static toDomain(raw: any): User | null {
     if (!raw) return null;
 
@@ -37,6 +37,17 @@ export class UserMap {
       avatar: raw.avatar
     }, raw._id);
 
-    return userOrError.isSuccess ? userOrError.getValue() : null;
+    if (userOrError.isSuccess) {
+      const user = userOrError.getValue();
+      user.props.createdAt = raw.createdAt;
+      
+      user.props.updatedAt = raw.updatedAt;
+
+      user.props.deletedAt = raw.deletedAt;
+
+      return user;
+    }
+
+    return null;
   }
 }
