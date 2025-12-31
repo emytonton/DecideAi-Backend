@@ -51,4 +51,10 @@ export class User extends Entity<UserProps> {
     this.props.updatedAt = new Date();
     return Result.ok();
   }
+
+  public updateEmail(email: UserEmail): void {
+    this.props.email = email;
+    this.props.updatedAt = new Date();
+  }
+  
 }

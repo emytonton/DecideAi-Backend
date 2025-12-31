@@ -11,13 +11,20 @@ export class MongooseUserRepository implements IUserRepository {
     return UserMap.toDomain(rawUser);
   }
  
-  async exists(email: string): Promise<boolean> {
-    const user = await UserModel.findOne({ email });
+async exists(email: string): Promise<boolean> {
+    const user = await UserModel.findOne({ 
+      email: email, 
+      deletedAt: null 
+    });
     return !!user;
   }
 
+  
   async existsByUsername(username: string): Promise<boolean> {
-    const user = await UserModel.findOne({ username });
+    const user = await UserModel.findOne({ 
+      username: username, 
+      deletedAt: null 
+    });
     return !!user;
   }
 

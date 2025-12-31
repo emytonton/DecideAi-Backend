@@ -8,10 +8,10 @@ export class UpdateUserProfileController extends BaseController {
   async executeImpl(req: express.Request, res: express.Response): Promise<any> {
     // @ts-ignore
     const userId = req.userId;
-    const { username, avatar } = req.body;
+    const { username, avatar,email } = req.body;
 
     try {
-      const result = await this.useCase.execute({ userId, username, avatar });
+      const result = await this.useCase.execute({ userId, username, avatar,email });
       
       if (result.isFailure) {
         return this.clientError(res, result.error as string);
