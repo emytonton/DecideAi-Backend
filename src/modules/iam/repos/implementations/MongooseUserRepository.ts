@@ -40,4 +40,13 @@ export class MongooseUserRepository implements IUserRepository {
       { upsert: true, new: true }
     );
   }
+
+  async searchByUsername(query: string): Promise<User[]> {
+    const users = await UserModel.find({
+      username: { $regex: query, $options: 'i' }, 
+      deletedAt: null 
+    }).limit(20); 
+
+    return users.map(user => UserMap.toDomain(user) as User);
+  }
 }

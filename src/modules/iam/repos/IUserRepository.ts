@@ -7,4 +7,5 @@ export interface IUserRepository {
   findById(id: string): Promise<User | null>; 
   exists(email: string): Promise<boolean>;
   existsByUsername(username: string): Promise<boolean>; 
+  searchByUsername(query: string): Promise<User[]>;
 }
