@@ -3,6 +3,7 @@ import { createUserController } from '../../../useCases/createUser';
 
 const userRouter = express.Router();
 
+// Aqui definimos o final da rota: /signup
 userRouter.post('/signup', (req, res) => createUserController.execute(req, res));
 
 export { userRouter };

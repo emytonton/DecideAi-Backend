@@ -1,13 +1,12 @@
 import { CreateUserDTO } from "./CreateUserDTO";
-import { UseCase } from "../../../../shared/core/UseCase"; 
+import { UseCase } from "../../../../shared/core/UseCase";
 import { Result } from "../../../../shared/core/Result";
 import { IUserRepository } from "../../repos/IUserRepository";
 import { UserEmail } from "../../domain/valueObjects/UserEmail";
 import { UserPassword } from "../../domain/valueObjects/UserPassword";
 import { User } from "../../domain/entities/User";
 
-
-type Response = Result<void | any>;
+type Response = Result<any>;
 
 export class CreateUserUseCase implements UseCase<CreateUserDTO, Promise<Response>> {
   private userRepo: IUserRepository;
@@ -20,23 +19,20 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, Promise<Respons
     const { username, email, password } = request;
 
     try {
-      
       const userAlreadyExists = await this.userRepo.exists(email);
       if (userAlreadyExists) {
         return Result.fail("O e-mail já está em uso.");
       }
 
-   
       const emailOrError = UserEmail.create(email);
       const passwordOrError = UserPassword.create(password);
 
+      const combinedPropsResult = Result.combine([emailOrError, passwordOrError]);
       
-      const combinedPropsResult = Result.combine([emailOrError, passwordOrError]); 
-      
-      if (emailOrError.isFailure) return Result.fail(emailOrError.error as string);
-      if (passwordOrError.isFailure) return Result.fail(passwordOrError.error as string);
+      if (combinedPropsResult.isFailure) {
+        return Result.fail(combinedPropsResult.error as string);
+      }
 
-     
       const userOrError = User.create({
         username,
         email: emailOrError.getValue(),
@@ -49,10 +45,14 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, Promise<Respons
 
       const user = userOrError.getValue();
 
-     
       await this.userRepo.save(user);
 
-      return Result.ok();
+      
+      return Result.ok({
+        id: user.id.toString(),
+        username: user.username,
+        email: user.email.value
+      });
 
     } catch (err) {
       return Result.fail(err as any);
