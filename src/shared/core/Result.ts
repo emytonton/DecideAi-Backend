@@ -32,4 +32,11 @@ export class Result<T> {
   public static fail<U>(error: string): Result<U> {
     return new Result<U>(false, error);
   }
+
+  public static combine(results: Result<any>[]): Result<any> {
+    for (const result of results) {
+      if (result.isFailure) return result;
+    }
+    return Result.ok();
+  }
 }
