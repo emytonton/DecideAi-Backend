@@ -56,4 +56,13 @@ async exists(email: string): Promise<boolean> {
 
     return users.map(user => UserMap.toDomain(user) as User);
   }
+
+  async findAllByIds(ids: string[]): Promise<User[]> {
+  const users = await UserModel.find({ 
+    _id: { $in: ids },
+    deletedAt: null
+  });
+  return users.map(u => UserMap.toDomain(u) as User);
+}
+
 }

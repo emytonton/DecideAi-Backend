@@ -8,4 +8,5 @@ export interface IUserRepository {
   exists(email: string): Promise<boolean>;
   existsByUsername(username: string): Promise<boolean>; 
   searchByUsername(query: string): Promise<User[]>;
+  findAllByIds(ids: string[]): Promise<User[]>;
 }
