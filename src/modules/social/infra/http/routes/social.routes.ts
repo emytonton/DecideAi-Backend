@@ -8,7 +8,9 @@ import {
 } from '../../../useCases';
 
 const socialRouter = express.Router();
-
+socialRouter.get('/ping', (req, res) => {
+  return res.json({ message: 'Social Router is working!' });
+});
 
 socialRouter.use(ensureAuthenticated);
 

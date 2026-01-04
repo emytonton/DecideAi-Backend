@@ -12,8 +12,22 @@ export class SendFriendRequestController extends BaseController {
 
     try {
       const result = await this.useCase.execute({ senderId, receiverId });
-      if (result.isFailure) return this.clientError(res, result.error as string);
-      return this.ok(res);
+      
+      if (result.isFailure) {
+        return this.clientError(res, result.error as string);
+      }
+
+      const request = result.getValue();
+
+      
+      return this.ok(res, {
+        id: request.id.toString(), 
+        senderId: request.senderId, 
+        receiverId: request.receiverId, 
+        status: request.status, 
+        createdAt: request.createdAt 
+      });
+
     } catch (err) {
       return this.fail(res, err as Error);
     }

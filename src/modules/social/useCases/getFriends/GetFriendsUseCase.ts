@@ -15,15 +15,14 @@ export class GetFriendsUseCase implements UseCase<string, Promise<Result<GetFrie
   ) {}
 
   async execute(userId: string): Promise<Result<GetFriendsResponse>> {
-    
     const pendingRequests = await this.friendRequestRepo.findPendingByReceiverId(userId);
-    
-    
+
     const senderIds = pendingRequests.map(r => r.senderId);
     const senders = await this.userRepo.findAllByIds(senderIds);
 
     const pendingDTO = pendingRequests.map(req => {
       const sender = senders.find(u => u.id.toString() === req.senderId);
+
       return {
         requestId: req.id.toString(),
         sender: sender ? {
@@ -35,9 +34,8 @@ export class GetFriendsUseCase implements UseCase<string, Promise<Result<GetFrie
       };
     });
 
- 
     const acceptedRequests = await this.friendRequestRepo.findAcceptedByUserId(userId);
-    
+
     const friendIds = acceptedRequests.map(r => 
       r.senderId === userId ? r.receiverId : r.senderId
     );
