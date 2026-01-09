@@ -8,8 +8,8 @@ const DecisionOptionSchema = new mongoose.Schema({
     required: true, 
     enum: ['movie', 'food', 'drink', 'exercise', 'book'] 
   },
-  primaryFilter: { type: String, required: true }, // Ex: 'terror', 'japonesa'
-  secondaryFilter: { type: String, required: true }, // Ex: 'netflix', 'jantar'
+  primaryFilter: { type: String, required: true }, 
+  secondaryFilter: { type: String, required: true }, 
   imageUrl: { type: String }
 }, {
   _id: false,
