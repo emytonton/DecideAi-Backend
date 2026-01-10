@@ -15,7 +15,8 @@ export class UserMap {
       avatar: user.avatar,
       createdAt: user.createdAt,
       updatedAt: user.props.updatedAt, 
-      deletedAt: user.deletedAt       
+      deletedAt: user.deletedAt,
+      notificationToken: user.notificationToken     
     };
   }
 

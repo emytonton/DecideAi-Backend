@@ -11,6 +11,7 @@ interface UserProps {
   createdAt: Date;
   updatedAt?: Date;
   deletedAt?: Date | null; 
+  notificationToken?: string;
 }
 
 export class User extends Entity<UserProps> {
@@ -22,20 +23,36 @@ export class User extends Entity<UserProps> {
   get createdAt(): Date { return this.props.createdAt; }
   get deletedAt(): Date | null | undefined { return this.props.deletedAt; }
   get isDeleted(): boolean { return !!this.props.deletedAt; }
+  
+  get notificationToken(): string | undefined { return this.props.notificationToken; }
+  set notificationToken(token: string) { this.props.notificationToken = token; }
 
   private constructor(props: UserProps, id?: string) {
     super(props, id);
   }
 
-  public static create(props: { username: string; email: UserEmail; password: UserPassword; avatar?: string }, id?: string): Result<User> {
+  
+  public static create(props: { 
+    username: string; 
+    email: UserEmail; 
+    password: UserPassword; 
+    avatar?: string;
+    notificationToken?: string; 
+  }, id?: string): Result<User> {
+    
     if (!props.username || props.username.length < 3) {
       return Result.fail<User>("O nome de usuário deve ter pelo menos 3 caracteres.");
     }
-    const user = new User({ ...props, createdAt: new Date(), deletedAt: null }, id);
+
+    const user = new User({ 
+      ...props, 
+      createdAt: new Date(), 
+      deletedAt: null 
+    }, id);
+    
     return Result.ok<User>(user);
   }
 
-  
   public delete(): void {
     this.props.deletedAt = new Date();
   }
@@ -56,5 +73,4 @@ export class User extends Entity<UserProps> {
     this.props.email = email;
     this.props.updatedAt = new Date();
   }
-  
 }

@@ -7,11 +7,12 @@
     "dev": "ts-node-dev --respawn --transpile-only src/shared/infra/http/server.ts",
     "build": "tsc",
     "start": "node dist/shared/infra/http/server.js"
-},
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^1.13.2",
     "bcryptjs": "^3.0.3",
     "compression": "^1.8.1",
     "cors": "^2.8.5",
