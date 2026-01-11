@@ -4,7 +4,8 @@ import {
   createGroupDecisionController,
   answerGroupDecisionController,
   getMyDecisionsController,
-  markViewedController
+  markViewedController,
+  getGroupDecisionByIdController
 } from '../../../useCases';
 
 const groupDecisionRouter = express.Router();
@@ -23,5 +24,9 @@ groupDecisionRouter.post('/answer', (req, res) => answerGroupDecisionController.
 
 // 4. Marcar resultado como visto (Limpar notificação)
 groupDecisionRouter.patch('/viewed', (req, res) => markViewedController.execute(req, res));
+
+groupDecisionRouter.get('/:id', (req, res) => getGroupDecisionByIdController.execute(req, res));
+
+
 
 export { groupDecisionRouter };

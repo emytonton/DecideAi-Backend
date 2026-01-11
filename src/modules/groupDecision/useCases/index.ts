@@ -16,18 +16,22 @@ import { AnswerGroupDecisionController } from "./answerGroupDecision/AnswerGroup
 const answerGroupDecisionUseCase = new AnswerGroupDecisionUseCase(groupDecisionRepo, userRepository);
 export const answerGroupDecisionController = new AnswerGroupDecisionController(answerGroupDecisionUseCase);
 
-// ... (Create e Answer anteriores)
 
-// List
 import { GetMyDecisionsUseCase } from "./getMyDecisions/GetMyDecisionsUseCase";
 import { GetMyDecisionsController } from "./getMyDecisions/GetMyDecisionsController";
 
 const getMyDecisionsUseCase = new GetMyDecisionsUseCase(groupDecisionRepo);
 export const getMyDecisionsController = new GetMyDecisionsController(getMyDecisionsUseCase);
 
-// Mark Viewed
 import { MarkViewedUseCase } from "./markViewed/MarkViewedUseCase";
 import { MarkViewedController } from "./markViewed/MarkViewedController";
 
 const markViewedUseCase = new MarkViewedUseCase(groupDecisionRepo);
 export const markViewedController = new MarkViewedController(markViewedUseCase);
+
+
+import { GetGroupDecisionByIdUseCase } from "./getGroupDecisionById/GetGroupDecisionByIdUseCase";
+import { GetGroupDecisionByIdController } from "./getGroupDecisionById/GetGroupDecisionByIdController";
+
+const getGroupDecisionByIdUseCase = new GetGroupDecisionByIdUseCase(groupDecisionRepo);
+export const getGroupDecisionByIdController = new GetGroupDecisionByIdController(getGroupDecisionByIdUseCase);
