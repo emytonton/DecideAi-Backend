@@ -35,6 +35,7 @@ export class UserMap {
       username: raw.username,
       email: userEmailOrError.getValue(),
       password: userPasswordOrError.getValue(),
+      notificationToken: raw.notificationToken,
       avatar: raw.avatar
     }, raw._id);
 

@@ -28,19 +28,23 @@ export class LoginUseCase implements UseCase<LoginDTO, Promise<Result<LoginRespo
     try {
       
       const user = await this.userRepo.findByEmail(email);
+      
       if (!user) {
         return Result.fail("Credenciais inválidas."); 
       }
 
-     
+      
+      if (user.isDeleted) {
+        return Result.fail("Esta conta foi excluída.");
+      }
+
       const passwordValid = await user.password.comparePassword(password);
+      
       if (!passwordValid) {
         return Result.fail("Credenciais inválidas.");
       }
-
       
       const accessToken = this.authService.signJWT(user);
-
       
       return Result.ok<LoginResponse>({
         accessToken,
