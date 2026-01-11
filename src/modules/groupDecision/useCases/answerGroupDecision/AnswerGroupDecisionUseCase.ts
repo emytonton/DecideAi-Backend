@@ -22,27 +22,40 @@ export class AnswerGroupDecisionUseCase implements UseCase<RequestDTO, Promise<R
     if (!decision) return Result.fail("Decisão não encontrada.");
 
    
+    const participant = decision.participants.find(p => p.userId === req.userId);
+    if (!participant) return Result.fail("Você não é um participante desta decisão.");
+
     if (req.decline) {
       const result = decision.decline(req.userId);
       if (result.isFailure) return Result.fail(result.error as string);
+      
     } else if (req.voteOption) {
+      
+     
+      if (participant.vote) {
+        return Result.fail("Você já votou nesta decisão e não pode votar novamente.");
+      }
+
       const result = decision.vote(req.userId, req.voteOption);
       if (result.isFailure) return Result.fail(result.error as string);
+      
     } else {
       return Result.fail("Voto ou recusa obrigatórios.");
     }
 
- 
     await this.groupRepo.save(decision);
 
-   
     if (decision.status === 'finished' && decision.winner) {
       this.notifyCompletion(decision);
     }
 
+
     return Result.ok({
       status: decision.status,
-      winner: decision.winner
+      winner: decision.winner,
+      hasVoted: !!participant.vote, 
+      myVote: participant.vote,     
+      myStatus: participant.status  
     });
   }
 

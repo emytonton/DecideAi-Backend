@@ -2,7 +2,6 @@ import { UseCase } from "../../../../shared/core/UseCase";
 import { Result } from "../../../../shared/core/Result";
 import { IGroupDecisionRepository } from "../../repos/IGroupDecisionRepository";
 
-
 interface DecisionDTO {
   id: string;
   title: string;
@@ -11,6 +10,10 @@ interface DecisionDTO {
   winner?: string;
   hasViewedResult: boolean; 
   createdAt: Date;
+  
+  // Novos campos
+  hasVoted: boolean;
+  myVote: string | null;
 }
 
 export class GetMyDecisionsUseCase implements UseCase<string, Promise<Result<DecisionDTO[]>>> {
@@ -30,7 +33,11 @@ export class GetMyDecisionsUseCase implements UseCase<string, Promise<Result<Dec
         myStatus: myParticipant ? myParticipant.status : 'unknown',
         winner: d.winner,
         hasViewedResult: myParticipant ? myParticipant.hasViewedResult : true, 
-        createdAt: d.createdAt
+        createdAt: d.createdAt,
+
+        // Preenchimento dos novos campos
+        hasVoted: myParticipant ? !!myParticipant.vote : false,
+        myVote: myParticipant ? myParticipant.vote : null
       };
     });
 

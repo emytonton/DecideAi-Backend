@@ -4,7 +4,7 @@ import { IGroupDecisionRepository } from "../../repos/IGroupDecisionRepository";
 
 interface RequestDTO {
   decisionId: string;
-  userId: string; // Para garantir que o usuário tem permissão de ver
+  userId: string;
 }
 
 interface ResponseDTO {
@@ -13,7 +13,20 @@ interface ResponseDTO {
   status: string;
   winner: string | null;
   options: string[];
-  participants: { userId: string; status: string }[];
+  createdAt: Date;
+  
+  
+  participants: { 
+    userId: string; 
+    status: string;
+    hasVoted: boolean; 
+    vote: string | null; 
+  }[];
+  
+  
+  myStatus: string | null;
+  hasVoted: boolean;
+  myVote: string | null;
 }
 
 export class GetGroupDecisionByIdUseCase implements UseCase<RequestDTO, Promise<Result<ResponseDTO>>> {
@@ -26,9 +39,9 @@ export class GetGroupDecisionByIdUseCase implements UseCase<RequestDTO, Promise<
       return Result.fail("Decisão não encontrada.");
     }
 
-    // Opcional: Verificar se o usuário faz parte da decisão
-    const isParticipant = decision.participants.some(p => p.userId === req.userId);
-    if (!isParticipant) {
+    const me = decision.participants.find(p => p.userId === req.userId);
+    
+    if (!me) {
       return Result.fail("Você não tem permissão para ver esta decisão.");
     }
 
@@ -37,11 +50,22 @@ export class GetGroupDecisionByIdUseCase implements UseCase<RequestDTO, Promise<
       title: decision.title,
       status: decision.status,
       winner: decision.winner || null,
-      options: decision.options, // <--- O IMPORTANTE: AS OPÇÕES ESTÃO AQUI
+      createdAt: decision.createdAt,
+      options: decision.options,
+      
+     
       participants: decision.participants.map(p => ({
         userId: p.userId,
-        status: p.status
-      }))
+        status: p.status,
+        hasVoted: !!p.vote,   
+        vote: p.vote || null  
+      })),
+     
+
+      
+      myStatus: me.status,
+      hasVoted: !!me.vote,
+      myVote: me.vote || null
     });
   }
 }
