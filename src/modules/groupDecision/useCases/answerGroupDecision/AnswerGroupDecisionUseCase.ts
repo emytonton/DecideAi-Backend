@@ -21,7 +21,9 @@ export class AnswerGroupDecisionUseCase implements UseCase<RequestDTO, Promise<R
     const decision = await this.groupRepo.findById(req.decisionId);
     if (!decision) return Result.fail("Decisão não encontrada.");
 
-   
+    if (decision.status.toUpperCase() === 'FINISHED') {
+    return Result.fail("Esta decisão já foi encerrada.");
+}
     const participant = decision.participants.find(p => p.userId === req.userId);
     if (!participant) return Result.fail("Você não é um participante desta decisão.");
 

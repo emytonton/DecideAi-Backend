@@ -12,6 +12,9 @@ class AnswerGroupDecisionUseCase {
         const decision = await this.groupRepo.findById(req.decisionId);
         if (!decision)
             return Result_1.Result.fail("Decisão não encontrada.");
+        if (decision.status.toUpperCase() === 'FINISHED') {
+            return Result_1.Result.fail("Esta decisão já foi encerrada.");
+        }
         const participant = decision.participants.find(p => p.userId === req.userId);
         if (!participant)
             return Result_1.Result.fail("Você não é um participante desta decisão.");

@@ -10,6 +10,12 @@ class CreateGroupDecisionUseCase {
         this.userRepo = userRepo;
     }
     async execute(req) {
+        if (!req.title || req.title.trim().length === 0) {
+            return Result_1.Result.fail("O título da decisão é obrigatório.");
+        }
+        if (!req.options || req.options.length < 2) {
+            return Result_1.Result.fail("Uma decisão precisa de pelo menos 2 opções para ser votada.");
+        }
         const decisionOrError = GroupDecision_1.GroupDecision.create({
             creatorId: req.creatorId,
             title: req.title,
