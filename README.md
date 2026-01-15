@@ -30,6 +30,16 @@ Este projeto foi concebido seguindo rigorosamente os princípios de:
 
 ---
 
+### Estratégia de Testes
+Utilizamos **Jest** para testes unitários, aplicando a metodologia **TDD (Test Driven Development)** para garantir que falhas de lógica sejam detectadas antes do deploy.
+
+| Tipo de Teste | Cobertura Principal | Objetivo |
+| :--- | :--- | :--- |
+| **Unitários** | `UseCases` Críticos | Validar regras de negócio isoladas (ex: Votação, Criação de Decisão). |
+| **CI (Integração Contínua)** | GitHub Actions | Executa o build e os testes automaticamente a cada `push` ou `PR`. |
+
+---
+
 ## 🧠 Visão Geral do Domínio
 
 O domínio central do sistema é **Tomada de Decisão**, que se divide em três grandes contextos:
@@ -137,4 +147,5 @@ Este backend foi projetado para:
 - **Segurança:** Tratamento de erros robusto e validação de dados
 - **Flexibilidade:** Fácil adaptação para novos tipos de decisão ou fontes de dados
 - **Base Sólida:** Servir como API completa para clientes Mobile e Web
+
 
