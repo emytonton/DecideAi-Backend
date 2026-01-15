@@ -2,6 +2,8 @@
 
 Backend do **DecideAI**, um aplicativo que ajuda pessoas ou grupos de amigos a tomarem decisões de forma colaborativa ou individual, utilizando sorteio, votação em grupo e listas personalizadas.
 
+> **Base URL:** https://decide-ai-backend.vercel.app
+> 
 Este projeto foi concebido seguindo rigorosamente os princípios de:
 
 - **Domain-Driven Design (DDD)**
@@ -24,6 +26,7 @@ Este projeto foi concebido seguindo rigorosamente os princípios de:
 - **Tempo Real:** Socket.io
 - **Storage (Imagens):** AWS S3 (Amazon Simple Storage Service)
 - **Uploads:** Multer
+- - **Infraestrutura / Deploy:** Vercel (Serverless Functions)
 
 ---
 
@@ -134,3 +137,4 @@ Este backend foi projetado para:
 - **Segurança:** Tratamento de erros robusto e validação de dados
 - **Flexibilidade:** Fácil adaptação para novos tipos de decisão ou fontes de dados
 - **Base Sólida:** Servir como API completa para clientes Mobile e Web
+
