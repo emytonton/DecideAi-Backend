@@ -4,7 +4,7 @@
   "description": "Backend do DecideAI. Aplicação para ajuda na tomada de decisões em grupo ou solo. Arquitetura baseada em DDD, Clean Architecture e SOLID. Stack: Node.js, TypeScript, Express, MongoDB, Socket.io e AWS S3.",
   "main": "index.js",
   "engines": {
-    "node": "18.x"
+    "node": "20.x"
   },
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/shared/infra/http/server.ts",
