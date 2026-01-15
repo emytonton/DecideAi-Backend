@@ -1,7 +1,9 @@
 import 'dotenv/config'; 
 import express from 'express';
 import cors from 'cors';
-import mongoose from 'mongoose'; 
+
+import { ensureDatabaseConnection } from '../../../shared/infra/http/middleware/ensureDatabaseConnection';
+
 
 import { userRouter } from '../../../modules/iam/infra/http/routes/user.routes';
 import { socialRouter } from '../../../modules/social/infra/http/routes/social.routes';
@@ -15,22 +17,7 @@ app.use(express.json());
 app.use(cors());
 
 
-const databaseUrl = process.env.DATABASE_URL || process.env.MONGO_URL || 'mongodb://localhost:27017/decideai';
-
-
-const connectDB = async () => {
-  if (mongoose.connection.readyState === 0) {
-    try {
-      await mongoose.connect(databaseUrl);
-      console.log('📦 Database connected successfully (Vercel/Local)!');
-    } catch (err) {
-      console.error('❌ Error connecting to database:', err);
-    }
-  }
-};
-
-
-connectDB();
+app.use(ensureDatabaseConnection);
 
 
 app.use('/api/v1/users', userRouter);
