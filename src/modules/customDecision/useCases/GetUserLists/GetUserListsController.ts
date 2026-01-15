@@ -7,7 +7,7 @@ export class GetUserListsController extends BaseController {
 
   async executeImpl(req: express.Request, res: express.Response): Promise<any> {
     // @ts-ignore
-    const userId = req.userId;
+    const userId = req.userId as string;
 
     try {
       const result = await this.useCase.execute(userId);

@@ -30,7 +30,6 @@ export class MongooseUserListRepository implements IUserListRepository {
         userId: data.userId,
         title: data.title,
         options: data.options,
-        createdAt: new Date(data.createdAt) 
       }, d._id.toString()).getValue();
     });
   }
@@ -45,7 +44,6 @@ export class MongooseUserListRepository implements IUserListRepository {
       userId: data.userId,
       title: data.title,
       options: data.options,
-      createdAt: new Date(data.createdAt)
     }, doc._id.toString()).getValue();
   }
 

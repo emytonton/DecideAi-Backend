@@ -10,8 +10,6 @@ interface DecisionDTO {
   winner?: string;
   hasViewedResult: boolean; 
   createdAt: Date;
-  
-  // Novos campos
   hasVoted: boolean;
   myVote: string | null;
 }
@@ -34,10 +32,8 @@ export class GetMyDecisionsUseCase implements UseCase<string, Promise<Result<Dec
         winner: d.winner,
         hasViewedResult: myParticipant ? myParticipant.hasViewedResult : true, 
         createdAt: d.createdAt,
-
-        // Preenchimento dos novos campos
         hasVoted: myParticipant ? !!myParticipant.vote : false,
-        myVote: myParticipant ? myParticipant.vote : null
+        myVote: myParticipant?.vote || null
       };
     });
 

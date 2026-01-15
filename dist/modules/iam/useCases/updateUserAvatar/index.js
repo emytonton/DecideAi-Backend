@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.updateUserAvatarController = void 0;
+const S3StorageProvider_1 = require("../../../../shared/infra/providers/implementations/S3StorageProvider");
+const repos_1 = require("../../repos");
+const UpdateUserAvatarUseCase_1 = require("./UpdateUserAvatarUseCase");
+const UpdateUserAvatarController_1 = require("./UpdateUserAvatarController");
+const storageProvider = new S3StorageProvider_1.S3StorageProvider();
+const updateUserAvatarUseCase = new UpdateUserAvatarUseCase_1.UpdateUserAvatarUseCase(repos_1.userRepository, storageProvider);
+const updateUserAvatarController = new UpdateUserAvatarController_1.UpdateUserAvatarController(updateUserAvatarUseCase);
+exports.updateUserAvatarController = updateUserAvatarController;

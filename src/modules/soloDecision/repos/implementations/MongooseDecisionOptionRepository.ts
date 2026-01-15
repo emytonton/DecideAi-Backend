@@ -12,7 +12,7 @@ export class MongooseDecisionOptionRepository implements IDecisionOptionReposito
       category: doc.category as any,
       primaryFilter: doc.primaryFilter,
       secondaryFilter: doc.secondaryFilter,
-      imageUrl: doc.imageUrl
+      imageUrl: doc.imageUrl || undefined
     }, doc._id).getValue());
   }
 

@@ -7,7 +7,7 @@ export class AnswerFriendRequestController extends BaseController {
 
   async executeImpl(req: express.Request, res: express.Response): Promise<any> {
     // @ts-ignore
-    const userId = req.userId;
+    const userId = req.userId as string;
     const { requestId, action } = req.body;
 
     try {

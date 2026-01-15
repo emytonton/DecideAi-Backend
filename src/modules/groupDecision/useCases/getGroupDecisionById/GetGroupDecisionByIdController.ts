@@ -7,8 +7,8 @@ export class GetGroupDecisionByIdController extends BaseController {
 
   async executeImpl(req: express.Request, res: express.Response): Promise<any> {
     // @ts-ignore
-    const userId = req.userId;
-    const { id } = req.params; // Pega o ID da URL
+    const userId = req.userId as string;
+    const { id } = req.params;
 
     try {
       const result = await this.useCase.execute({ 

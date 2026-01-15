@@ -7,7 +7,7 @@ export class SendFriendRequestController extends BaseController {
 
   async executeImpl(req: express.Request, res: express.Response): Promise<any> {
     // @ts-ignore
-    const senderId = req.userId;
+    const senderId = req.userId as string;
     const { receiverId } = req.body;
 
     try {
