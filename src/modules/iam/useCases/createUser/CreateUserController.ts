@@ -18,18 +18,22 @@ export class CreateUserController extends BaseController {
       const result = await this.useCase.execute(dto);
 
       if (result.isFailure) {
-        const error = result.error as string;
-        if (error.includes('já está em uso')) {
-            return this.conflict(res, error);
+        const errorValue = result.error;
+        const errorMessage = typeof errorValue === 'string' 
+            ? errorValue 
+            : (errorValue as any)?.message || String(errorValue);
+
+        if (errorMessage.includes('já está em uso') || errorMessage.includes('duplicate')) {
+            return this.conflict(res, errorMessage);
         }
-        return this.clientError(res, error);
+        return this.clientError(res, errorMessage);
       } else {
-       
         const userCreated = result.getValue();
         return res.status(201).json(userCreated);
       }
-    } catch (err) {
-      return this.fail(res, err as Error);
+    } catch (err: any) {
+      console.log(err);
+      return this.fail(res, err.message || String(err));
     }
   }
 }
