@@ -6,7 +6,14 @@ import { UserEmail } from "../../domain/valueObjects/UserEmail";
 import { UserPassword } from "../../domain/valueObjects/UserPassword";
 import { User } from "../../domain/entities/User";
 
-type Response = Result<any>;
+interface CreateUserResponse {
+  id: string;
+  username: string;
+  email: string;
+}
+
+
+type Response = Result<CreateUserResponse>;
 
 export class CreateUserUseCase implements UseCase<CreateUserDTO, Promise<Response>> {
   private userRepo: IUserRepository;
@@ -15,33 +22,29 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, Promise<Respons
     this.userRepo = userRepo;
   }
 
- async execute(request: CreateUserDTO): Promise<Response> {
+  async execute(request: CreateUserDTO): Promise<Response> {
     const { username, email, password } = request;
 
     try {
-     
       const userAlreadyExists = await this.userRepo.exists(email);
       if (userAlreadyExists) {
-        return Result.fail("O e-mail já está em uso.");
+        return Result.fail<CreateUserResponse>("O e-mail já está em uso.");
       }
 
-     
       const usernameTaken = await this.userRepo.existsByUsername(username);
       if (usernameTaken) {
-        return Result.fail("Este nome de usuário já está em uso.");
+        return Result.fail<CreateUserResponse>("Este nome de usuário já está em uso.");
       }
 
-     
       const emailOrError = UserEmail.create(email);
       const passwordOrError = UserPassword.create(password);
 
       const combinedPropsResult = Result.combine([emailOrError, passwordOrError]);
-      
+
       if (combinedPropsResult.isFailure) {
-        return Result.fail(combinedPropsResult.error as string);
+        return Result.fail<CreateUserResponse>(combinedPropsResult.error as string);
       }
 
-   
       const userOrError = User.create({
         username,
         email: emailOrError.getValue(),
@@ -49,23 +52,23 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, Promise<Respons
       });
 
       if (userOrError.isFailure) {
-        return Result.fail(userOrError.error as string);
+        return Result.fail<CreateUserResponse>(userOrError.error as string);
       }
 
       const user = userOrError.getValue();
 
-  
       await this.userRepo.save(user);
 
-     
-      return Result.ok({
+   
+      return Result.ok<CreateUserResponse>({
         id: user.id.toString(),
         username: user.username,
         email: user.email.value
       });
 
-    } catch (err) {
-      return Result.fail(err as any);
+    } catch (err: any) {
+      
+      return Result.fail<CreateUserResponse>(err?.message || String(err));
     }
   }
 }
